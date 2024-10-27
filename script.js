@@ -1,4 +1,6 @@
 //will return a string representing the computer choice 
+
+
 function getComputerChoice()
 {
     let computerChoices = ["rock", "paper", "scissors"];   //list of options
@@ -23,8 +25,12 @@ function getHumanChoice()
         return humanChoice;
 }
 
+let humanScore = 0;
+let computerScore = 0; 
+
 function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanChoice())
     {
+        console.log("Computer throws..." + computerChoice + " and Human throws..." + humanChoice);
 
         switch(computerChoice)
         {
@@ -95,10 +101,6 @@ function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanCho
 
 function playGame()
 {
-    let humanScore = 0;
-    let computerScore = 0;
-    
-    
     //plays 5 frounds 
     for (let i =0; i < 5; i++)
     {
@@ -107,6 +109,10 @@ function playGame()
 
     console.log("Human Score is: " + humanScore);
     console.log("Computer Score is: " +computerScore);
+
+    //reset
+    humanScore = 0;
+    computerScore = 0; 
 }
 
 
