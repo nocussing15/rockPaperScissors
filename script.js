@@ -1,6 +1,8 @@
 //will return a string representing the computer choice 
 
 
+
+
 function getComputerChoice()
 {
     let computerChoices = ["rock", "paper", "scissors"];   //list of options
@@ -9,7 +11,8 @@ function getComputerChoice()
     return computerChoice;  
 }
 
-function getHumanChoice()
+//function no longer needed 
+/*function getHumanChoice()
 {
 
     let humanChoice = prompt("Rock, Paper, or Scissors?");
@@ -24,14 +27,13 @@ function getHumanChoice()
     else
         return humanChoice;
 }
+*/
 
-let humanScore = 0;
-let computerScore = 0; 
 
 function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanChoice())
     {
-        console.log("Computer throws..." + computerChoice + " and Human throws..." + humanChoice);
-
+        let introChoices = ("Computer throws..." + computerChoice + " and Human throws..." + humanChoice);
+        let result = ''; //no winner as o fyet 
         switch(computerChoice)
         {
         case "rock":
@@ -39,18 +41,18 @@ function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanCho
             if (humanChoice === "paper")
             {
                 humanScore++; 
-                console.log("You win! Paper beats Rock");
+                result = ("You win! Paper beats Rock");
             }
             //computer wins
             else if(humanChoice ==="scissors")
             {
                 computerScore++;
-                console.log("You lose! Rock beats Scissors");
+                result = ("You lose! Rock beats Scissors");
             }
             //ties 
-            else
+            else if (humanChoice === "rock")
             {
-                console.log("It's a tie");
+                result = ("It's a tie");
             }
 
             break
@@ -59,19 +61,19 @@ function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanCho
             if (humanChoice === "scissors")
             {
                 humanScore++;
-                console.log("You win! Scissors beat Paper");
+                result = ("You win! Scissors beat Paper");
             }
 
             //computer win
             else if (humanChoice === "rock")
             {
                 computerScore++;
-                console.log("You lose! Paper beats Rock");
+                result = ("You lose! Paper beats Rock");
             }
 
-            else
+            else if (humanChoice === "paper")
             {
-                console.log("It's a tie");
+                result = ("It's a tie");
             }
 
             break
@@ -80,39 +82,124 @@ function playRound(computerChoice = getComputerChoice(),humanChoice= getHumanCho
             if (humanChoice === "rock")
             {
                 humanScore++;
-                console.log("You win! Rock beats Scissors");
+                result = ("You win! Rock beats Scissors");
             }
             //computer wins
             else if(humanChoice === "paper")
             {
                 computerScore++;
-                console.log("You lose! Scissors beat Paper");
+                result = ("You lose! Scissors beat Paper");
             }
-            else
+            else if(humanChoice === "scissors")
             {
-                console.log("It's a tie"); 
+                result = ("It's a tie"); 
             }
             break
         }
+        updateScoreBoard(computerScore,humanScore)
+        addToList(introChoices,result); 
+        checkForWinner(computerScore,humanScore,winningScore); 
+        
     }
 
 
-
-
-function playGame()
-{
-    //plays 5 frounds 
-    for (let i =0; i < 5; i++)
-    {
-        playRound(); 
-    }
-
-    console.log("Human Score is: " + humanScore);
-    console.log("Computer Score is: " +computerScore);
-
-    //reset
-    humanScore = 0;
-    computerScore = 0; 
+function addToList(introChoices,result){
+    const listItem = document.createElement('li');
+    listItem.textContent = introChoices+ ": " + result; 
+    moves.appendChild(listItem);
 }
+
+
+function updateScoreBoard(computerScore,humanScore) {
+    humanPlayerScore.innerText = "Human Score is " + humanScore + '\n';
+    computerPlayerScore.innerText = "Computer Score is " + computerScore;
+}
+
+
+function reset(){
+    humanScore = 0;
+    computerScore = 0;
+    updateScoreBoard(computerScore,humanScore) //resets scoreboard as well
+    //clear moves list 
+    while (moves.firstChild) {
+        moves.removeChild(moves.firstChild)
+    }
+}
+
+function checkForWinner(computerScore,humanScore,winningScore){
+    if ((computerScore >= winningScore) || (humanScore >= winningScore)){
+        let winner = (humanScore === winningScore) ? "You win!" : (computerScore === winningScore) ? "Computer Wins": "Game is ongoing";
+        alert(winner); 
+        setTimeout(reset,1000); 
+    }
+}
+
+
+    
+//global variables
+let humanScore = 0;
+let computerScore = 0; 
+let winningScore = 5; 
+//container
+const choices = document.getElementById("choices");
+
+//rock button 
+const rockButton = document.createElement("button");
+rockButton.style.color = "blue"; 
+rockButton.classList.add("button");          
+rockButton.setAttribute("id","rockButton");
+rockButton.textContent="ROCK!";
+rockButton.addEventListener("click",()=>{
+    playRound(getComputerChoice(),"rock")});
+
+
+choices.appendChild(rockButton);
+
+//paper button
+const paperButton = document.createElement("button");
+paperButton.style.color = "red";
+paperButton.classList.add("button");
+paperButton.setAttribute("id","paperButton");
+paperButton.textContent="PAPER!";
+paperButton.addEventListener("click",()=>{
+    playRound(getComputerChoice(),"paper")});
+choices.appendChild(paperButton); 
+
+//scissors button
+const scissorsButton = document.createElement("button");
+scissorsButton.style.color = "green";
+scissorsButton.classList.add("button");
+scissorsButton.setAttribute("id","scissorsButton"); 
+scissorsButton.textContent="SCISSORS!";
+scissorsButton.addEventListener("click",()=>{
+    playRound(getComputerChoice(),"scissors")});
+choices.appendChild(scissorsButton);
+
+
+//scoreboard 
+const score = document.getElementById("scoreBoard"); 
+const scoreBoard = document.createElement("div");
+
+const humanPlayerScore = document.createElement("p");
+humanPlayerScore.setAttribute("id","humanScore");
+humanPlayerScore.textContent = "Human Score is " + humanScore + '\n';
+
+const computerPlayerScore = document.createElement("p");
+computerPlayerScore.setAttribute("id","computerScore"); 
+computerPlayerScore.textContent = "Computer Score is " + computerScore;
+
+scoreBoard.appendChild(humanPlayerScore);
+scoreBoard.appendChild(computerPlayerScore);
+
+score.appendChild(scoreBoard);
+
+
+
+//moves list
+const movesList = document.getElementById("moves"); 
+const moves = document.createElement("ol");
+movesList.appendChild(moves); 
+
+
 
 
