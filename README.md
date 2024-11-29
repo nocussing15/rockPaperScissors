@@ -1,2 +1,3 @@
 # rockPaperScissors
-Read me for rockPaperScissors
+Game of rock, paper, and scissors. Created using html and javascript.
+
